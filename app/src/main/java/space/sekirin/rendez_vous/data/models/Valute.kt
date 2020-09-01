@@ -1,4 +1,4 @@
-package space.sekirin.rendez_vous
+package space.sekirin.rendez_vous.data.models
 
 import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.Element

@@ -1,8 +1,11 @@
-package space.sekirin.rendez_vous
+package space.sekirin.rendez_vous.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
+import space.sekirin.rendez_vous.data.models.Valute
+import space.sekirin.rendez_vous.data.ValuteRepository
+import space.sekirin.rendez_vous.network.ApiFactory
 import kotlin.coroutines.CoroutineContext
 
 class MainViewModel: ViewModel() {
@@ -16,7 +19,8 @@ class MainViewModel: ViewModel() {
 
     private val scope = CoroutineScope(coroutineContext)
 
-    private val repository: ValuteRepository = ValuteRepository(ApiFactory.apiService)
+    private val repository: ValuteRepository =
+        ValuteRepository(ApiFactory.apiService)
 
     val valuteLiveData = MutableLiveData<List<Valute>>()
 

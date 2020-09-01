@@ -1,7 +1,6 @@
-package space.sekirin.rendez_vous
+package space.sekirin.rendez_vous.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
@@ -19,5 +18,7 @@ object ApiFactory {
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
 
-    val apiService: ApiService = retrofit().create(ApiService::class.java)
+    val apiService: ApiService = retrofit()
+        .create(
+        ApiService::class.java)
 }

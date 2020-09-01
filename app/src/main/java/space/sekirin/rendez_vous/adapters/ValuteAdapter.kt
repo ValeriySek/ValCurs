@@ -1,13 +1,18 @@
-package space.sekirin.rendez_vous
+package space.sekirin.rendez_vous.adapters
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.list_valute_item.view.*
+import space.sekirin.rendez_vous.R
+import space.sekirin.rendez_vous.data.models.Valute
 
-class ValuteAdapter: RecyclerView.Adapter<ValuteAdapter.ViewHolder>() {
+class ValuteAdapter(var context: Context): RecyclerView.Adapter<ValuteAdapter.ViewHolder>() {
 
     lateinit var onItemClickListener: OnItemClickListener
 
@@ -34,17 +39,19 @@ class ValuteAdapter: RecyclerView.Adapter<ValuteAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val valuteValue = listValut[0].value.replace(",", ".").toDouble()
         holder.bind(listValut[position], valuteValue)
+        holder.itemView.animation = AnimationUtils.loadAnimation(context,
+            R.anim.fade_transition_animation
+        )
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener{
 
-        private var tvName: TextView
-        private var tvValue: TextView
+        private var tvCharCode = itemView.tvCharCode
+        private var tvName: TextView = itemView.tvName
+        private var tvValue: TextView = itemView.tvValue
 
         init {
-            tvName = itemView.findViewById(R.id.tvName)
-            tvValue = itemView.findViewById(R.id.tvValue)
             itemView.setOnClickListener(this)
         }
 
@@ -53,8 +60,9 @@ class ValuteAdapter: RecyclerView.Adapter<ValuteAdapter.ViewHolder>() {
         }
 
         fun bind(item: Valute, valuteValue: Double){
+            tvCharCode.text = item.charCode
             tvName.text = item.name
-            tvValue.text = String.format("%.2f", (valuteValue / item.value.replace(",", ".").toDouble()))
+            tvValue.text = String.format("%.4f", (valuteValue / item.value.replace(",", ".").toDouble()))
         }
 
     }

@@ -1,4 +1,4 @@
-package space.sekirin.rendez_vous
+package space.sekirin.rendez_vous.network
 
 import java.lang.Exception
 
