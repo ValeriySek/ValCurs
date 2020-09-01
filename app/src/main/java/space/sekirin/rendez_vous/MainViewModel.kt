@@ -9,6 +9,8 @@ class MainViewModel: ViewModel() {
 
     private val parentJob = Job()
 
+    private var valuts: MutableList<Valute>? = mutableListOf()
+
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Default
 
@@ -18,9 +20,24 @@ class MainViewModel: ViewModel() {
 
     val valuteLiveData = MutableLiveData<List<Valute>>()
 
+    fun setList(position: Int){
+
+        valuts?.add(0, valuts!![position])
+        valuts?.removeAt(position + 1)
+
+        valuteLiveData.value = valuts
+    }
+
     fun fetchValute(){
         scope.launch {
             val valutes = repository.getValuts()
+            valuts = valutes
+            for (i in 0 until valutes!!.size-1){
+                if(valutes[i].charCode.equals("USD")){
+                    valutes.add(0, valutes[i])
+                    valutes.removeAt(i + 1)
+                }
+            }
             valuteLiveData.postValue(valutes)
         }
     }

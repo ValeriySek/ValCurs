@@ -8,15 +8,6 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 object ApiFactory {
 
-//    private val interceptor = Interceptor{chain ->
-//        val response= chain.proceed(chain.request())
-//        val modified  = response
-//            .newBuilder()
-//            .header("Content-Type", "charset=windows-1252")
-////            .addHeader("Content-Type", "charset=utf-8")
-//            .build()
-//    }
-
     private val client = OkHttpClient().newBuilder()
         .addInterceptor(ResponseInterceptor())
         .build()

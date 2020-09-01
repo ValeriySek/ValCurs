@@ -5,24 +5,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import java.nio.ByteBuffer
 
-class ValuteAdapter : androidx.recyclerview.widget.ListAdapter<Valute, ValuteAdapter.ViewHolder>(ValuteDiffCallback()) {
+class ValuteAdapter: RecyclerView.Adapter<ValuteAdapter.ViewHolder>() {
+
+    lateinit var onItemClickListener: OnItemClickListener
+
+    var listValut: MutableList<Valute> = mutableListOf()
+
+    fun valuts(list: List<Valute>){
+        listValut.clear()
+        listValut.addAll(list)
+        notifyDataSetChanged()
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context)
+        return ViewHolder(
+            LayoutInflater.from(parent.context)
             .inflate(R.layout.list_valute_item, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var valuteValue = getItem(0).value.replace(",", ".").toDouble()
-        holder.bind(getItem(position), valuteValue)
+    override fun getItemCount(): Int {
+        Log.i("Problems", "ValuteAdapter2 " + listValut.size)
+        return listValut.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val valuteValue = listValut[0].value.replace(",", ".").toDouble()
+        holder.bind(listValut[position], valuteValue)
+    }
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener{
 
         private var tvName: TextView
         private var tvValue: TextView
@@ -30,25 +45,21 @@ class ValuteAdapter : androidx.recyclerview.widget.ListAdapter<Valute, ValuteAda
         init {
             tvName = itemView.findViewById(R.id.tvName)
             tvValue = itemView.findViewById(R.id.tvValue)
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+            onItemClickListener.onItemClick(adapterPosition)
         }
 
         fun bind(item: Valute, valuteValue: Double){
             tvName.text = item.name
-            tvValue.text = (valuteValue / item.value.replace(",", ".").toDouble()).toString()
+            tvValue.text = String.format("%.2f", (valuteValue / item.value.replace(",", ".").toDouble()))
         }
 
     }
-
-
-}
-
-private class ValuteDiffCallback : DiffUtil.ItemCallback<Valute>(){
-    override fun areItemsTheSame(oldItem: Valute, newItem: Valute): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: Valute, newItem: Valute): Boolean {
-        return oldItem == newItem
+    interface OnItemClickListener{
+        fun onItemClick(position: Int)
     }
 
 }
